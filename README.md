@@ -4,6 +4,13 @@ Tools to load maxmind geoip DBs into bigquery using binary based network/ip matc
 
 Implements the new binary based network matching as shown in [geolocation-with-bigquery-de-identify-76-million-ip-addresses-in-20-seconds](https://cloud.google.com/blog/products/data-analytics/geolocation-with-bigquery-de-identify-76-million-ip-addresses-in-20-seconds)
 
+## Getting Started
+```
+export MAXMIND_KEY=YOUR_KEY
+./geoip-download
+./bq-load
+```
+
 ## Included tools
 
 `./geoip-download` ... download new set of GeoLite2- CSV tables check sha256sum and move old files to `archive/`
@@ -39,3 +46,11 @@ GROUP BY city_name, geoname_id
 ORDER BY c DESC
 LIMIT 5000
 ```
+
+## Get API Key
+
+- Create account at https://www.maxmind.com/
+- Wait for email
+- Click link in email (you get to the reset password dialog, set a password)
+- Login
+- Create License Key (takes a few minutes until key is accepted)
