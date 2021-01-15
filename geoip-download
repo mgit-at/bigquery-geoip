@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: Michael Gebetsroither <mgebetsroither@mgit.at>
 
-set -e
+set -eu
 
 key_=${MAXMIND_KEY}
 
