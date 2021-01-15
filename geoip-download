@@ -14,7 +14,7 @@ cleanup() {
     mkdir -p archive
     [ -d archive ] || die "no archive/ found"
     find archive -maxdepth 1 -type d -iname 'GeoLite2-*' -print0 |xargs -0r rm -rfv
-    mv GeoLite2-* archive
+    mv -f GeoLite2-* archive &>/dev/null || true
     echo
 }
 
