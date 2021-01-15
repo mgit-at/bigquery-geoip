@@ -1,10 +1,16 @@
-bigquery-geoip
-==============
+# bigquery-geoip
 
-Scripts to load maxmind geoip DBs into bigquery
+Tools to load maxmind geoip DBs into bigquery using binary based network/ip matching
 
-Implements the new binary based network matching as shown in
-https://cloud.google.com/blog/products/data-analytics/geolocation-with-bigquery-de-identify-76-million-ip-addresses-in-20-seconds
+Implements the new binary based network matching as shown in [geolocation-with-bigquery-de-identify-76-million-ip-addresses-in-20-seconds](https://cloud.google.com/blog/products/data-analytics/geolocation-with-bigquery-de-identify-76-million-ip-addresses-in-20-seconds)
+
+## Included tools
+
+`./geoip-download` ... download new set of GeoLite2- CSV tables check sha256sum and move old files to `archive/`
+
+`./bq-load [dataset name]` ... BigQuery import, into default project, default dataset name is `geoip`
+
+## Bigquery Usage Example
 
 ```sql
 # replace with your source of IP addresses
