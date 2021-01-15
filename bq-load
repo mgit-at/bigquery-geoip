@@ -1,0 +1,32 @@
+#!/bin/bash
+# Author: Michael Gebetsroither <mgebetsroither@mgit.at>
+
+set -e
+
+dataset_=${1:-geoip}
+
+asn_blocks_ipv4_=$(ls GeoLite2-ASN-CSV*/GeoLite2-ASN-Blocks-IPv4.csv)
+city_blocks_ipv4_=$(ls GeoLite2-City-CSV*/GeoLite2-City-Blocks-IPv4.csv)
+city_locations_=$(ls GeoLite2-City-CSV*/GeoLite2-City-Locations-en.csv)
+
+sql_=$(cat ./maxmind.sql)
+
+cleanup() {
+    bq rm --force -t $dataset_.asn_blocks_ipv4 || true
+    bq rm --force -t $dataset_.city_blocks_ipv4 || true
+    bq rm --force -t $dataset_.city_locations || true
+}
+
+load() {
+    bq load --skip_leading_rows=1 $dataset_.asn_blocks_ipv4 $asn_blocks_ipv4_ "network:string,autonomous_system_number:integer,autonomous_system_organization:string"
+
+    bq load --skip_leading_rows=1 $dataset_.city_blocks_ipv4 $city_blocks_ipv4_ "network:string,geoname_id:integer,registered_country_geoname_id:integer,represented_country_geoname_id:integer,is_anonymous_proxy:integer,is_satellite_provider:integer,postal_code:string,latitude:float,longitude:float,accuracy_radius:integer"
+
+    bq load --skip_leading_rows=1 $dataset_.city_locations $city_locations_ "geoname_id:integer,locale_code:string,continent_code:string,continent_name:string,country_iso_code:string,country_name:string,subdivision_1_iso_code:string,subdivision_1_name:string,subdivision_2_iso_code:string,subdivision_2_name:string,city_name:string,metro_code:integer,time_zone:string,is_in_european_union:integer"
+}
+
+cleanup
+load
+
+# generate
+bq query --use_legacy_sql=false --allow_large_results --replace --append_table=false --destination_table=$dataset_.city "${sql_//geoip\./$dataset_.}"

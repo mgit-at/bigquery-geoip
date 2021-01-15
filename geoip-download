@@ -1,0 +1,35 @@
+#!/bin/bash
+# Author: Michael Gebetsroither <mgebetsroither@mgit.at>
+
+set -e
+
+key_=${MAXMIND_KEY}
+
+die() {
+    echo "Error: $*" >&2
+}
+
+cleanup() {
+    echo "### CLEANUP"
+    mkdir -p archive
+    [ -d archive ] || die "no archive/ found"
+    find archive -maxdepth 1 -type d -iname 'GeoLite2-*' -print0 |xargs -0r rm -rfv
+    mv GeoLite2-* archive
+    echo
+}
+
+download() {
+    echo "### DOWNLOAD"
+    for i in GeoLite2-ASN-CSV GeoLite2-City-CSV; do
+        for ext in zip zip.sha256; do
+            echo "## ${i}.$ext"
+            curl --remote-name --remote-header-name "https://download.maxmind.com/app/geoip_download?edition_id=${i}&license_key=${key_}&suffix=${ext}"
+        done
+        sha256sum -c ${i}*.zip.sha256 || die "hashsum mismatch: ${i}.zip"
+        unzip ${i}*.zip
+    done
+}
+
+cleanup
+download
+
