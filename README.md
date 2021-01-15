@@ -21,7 +21,7 @@ export MAXMIND_KEY=YOUR_KEY
 
 ```sql
 # replace with your source of IP addresses
-# here I'm using the same Wikipedia set from the previous article
+# this example is using the Wikipedia public data set
 WITH source_of_ip_addresses AS (
   SELECT REGEXP_REPLACE(contributor_ip, 'xxx', '0')  ip, COUNT(*) c
   FROM `publicdata.samples.wikipedia`
