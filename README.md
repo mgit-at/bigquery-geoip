@@ -4,6 +4,10 @@ Tools to load maxmind geoip DBs into bigquery using binary based network/ip matc
 
 Implements the new binary based network matching as shown in [geolocation-with-bigquery-de-identify-76-million-ip-addresses-in-20-seconds](https://cloud.google.com/blog/products/data-analytics/geolocation-with-bigquery-de-identify-76-million-ip-addresses-in-20-seconds)
 
+## TODO
+
+- schema tuning (still missing, PR welcome)
+
 ## Getting Started
 ```
 export MAXMIND_KEY=YOUR_KEY
